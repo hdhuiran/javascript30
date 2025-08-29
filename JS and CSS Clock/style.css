@@ -1,0 +1,101 @@
+html {
+  background: #018ded;
+  background-size: cover;
+  font-family: "helvetica neue";
+  text-align: center;
+  font-size: 10px;
+}
+
+body {
+  margin: 0;
+  font-size: 2rem;
+  display: flex;
+  flex: 1;
+  min-height: 100vh;
+  align-items: center;
+}
+
+.clock {
+  width: 30rem;
+  height: 30rem;
+  border: 20px solid white;
+  border-radius: 50%;
+  margin: 50px auto;
+  position: relative;
+  padding: 2rem;
+
+  /* box-shadow: [inset] [水平偏移(offset-x)] [垂直偏移(offset-y)] [模糊半径(blur-radius)] [扩散半径(spread-radius)] [颜色(color)];
+
+inset (可选): 加上这个关键词，阴影会从默认的外部阴影（投影）变为内部阴影。
+
+水平偏移: 正值向右，负值向左。
+
+垂直偏移: 正值向下，负值向上。
+
+模糊半径: 值越大，阴影边缘越模糊、越柔和。
+
+扩散半径 (可选): 正值使阴影在各个方向上扩大，负值使其缩小。
+
+颜色: 阴影的颜色。 */
+
+  /* 完全按照代码的书写顺序来渲染，先写的在最上面。
+
+可以把这个过程想象成贴贴纸或者画画。
+
+浏览器首先会画出元素本身。
+
+然后，它会从你写的 box-shadow 列表的最后一个阴影开始画。
+
+画完最后一个，再回来画倒数第二个，盖在刚才画的阴影上面。
+
+……以此类推，最后画你写的第一个阴影，这个阴影会盖在所有其他阴影的最上面。
+
+所以，渲染的堆叠顺序 (stacking order) 是和代码的顺序相反的。 */
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.1), inset 0 0 0 3px #efefef,
+    inset 0 0 10px black, 0 0 10px rgba(0, 0, 0, 0.2);
+
+  background-image: url("clock-face.png");
+  background-size: 100% 100%;
+}
+
+.clock-face {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  /*实现“视觉中心”而非“几何中心”
+几何中心：在没有任何干扰的情况下，浏览器会把 .clock-face 在其父容器 .clock 中进行完美的数学居中。
+
+视觉中心：但是，由于我们在 .clock 和 .clock-face 上都加了复杂的边框和阴影 (box-shadow)，尤其是底部的阴影通常会更重、更明显，这会让人眼在感觉上认为钟面有点“下沉”或“偏下”。  */
+  transform: translateY(-3px);
+}
+
+.hand {
+  width: 50%;
+  height: 6px;
+  background: black;
+  position: absolute;
+  top: 50%;
+
+  /* 調整指針旋轉的中心 */
+  /* 0%是将旋转的轴心移动到指针的顶端 100%将旋转的轴心移动到指针的最末端 默认50%是元素自己的中心 */
+  transform-origin: 100%;
+
+  /* 將指針歸位到12點鐘方向 */
+  transform: rotate(90deg);
+  transition: all 0.05s;
+  transition-timing-function: cubic-bezier(0.1, 2.7, 0.58, 1);
+}
+
+/* 使用 margin-left 是为了修正 transform-origin 带来的副作用 */
+/* margin-left 的根本任务，就是抵消掉 transform-origin 带来的、长短不一的偏移量，从而实现“将所有指针尾巴叠在钟面中心”这个至关重要的目标 */
+.second-hand {
+  width: 50%;
+}
+.min-hand {
+  width: 40%;
+  margin-left: 10%;
+}
+.hour-hand {
+  width: 25%;
+  margin-left: 25%;
+}
