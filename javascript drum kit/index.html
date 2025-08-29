@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>JS Drum Kit</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- kbd标签：定义键盘文本。它表示文本是从键盘上键入的。它经常用在与计算机相关的文档或手册中。 -->
+
+  <div class="keys">
+    <div data-key="65" class="key">
+      <kbd>A</kbd>
+      <span class="sound">clap</span>
+    </div>
+    <div data-key="83" class="key">
+      <kbd>S</kbd>
+      <span class="sound">hihat</span>
+    </div>
+    <div data-key="68" class="key">
+      <kbd>D</kbd>
+      <span class="sound">kick</span>
+    </div>
+    <div data-key="70" class="key">
+      <kbd>F</kbd>
+      <span class="sound">openhat</span>
+    </div>
+    <div data-key="71" class="key">
+      <kbd>G</kbd>
+      <span class="sound">boom</span>
+    </div>
+    <div data-key="72" class="key">
+      <kbd>H</kbd>
+      <span class="sound">ride</span>
+    </div>
+    <div data-key="74" class="key">
+      <kbd>J</kbd>
+      <span class="sound">snare</span>
+    </div>
+    <div data-key="75" class="key">
+      <kbd>K</kbd>
+      <span class="sound">tom</span>
+    </div>
+    <div data-key="76" class="key">
+      <kbd>L</kbd>
+      <span class="sound">tink</span>
+    </div>
+  </div>
+
+  <audio data-key="65" src="sounds/clap.wav"></audio>
+  <audio data-key="83" src="sounds/hihat.wav"></audio>
+  <audio data-key="68" src="sounds/kick.wav"></audio>
+  <audio data-key="70" src="sounds/openhat.wav"></audio>
+  <audio data-key="71" src="sounds/boom.wav"></audio>
+  <audio data-key="72" src="sounds/ride.wav"></audio>
+  <audio data-key="74" src="sounds/snare.wav"></audio>
+  <audio data-key="75" src="sounds/tom.wav"></audio>
+  <audio data-key="76" src="sounds/tink.wav"></audio>
+
+  <script>
+      window.addEventListener('keydown',(event)=>{
+        // console.log(event.keyCode);
+        
+        const key = document.querySelector(`div[data-key="${event.keyCode}"]`);
+        const audio = document.querySelector(`audio[data-key="${event.keyCode}"]`);
+        // console.log(key,audio);
+
+        if (!audio) {
+          return console.log("这个键没有绑定音乐")
+          };
+
+        key.classList.add("playing");
+        audio.currentTime = 0;
+        audio.play();
+      })
+
+      // window.addEventListener('transitionend',(event)=>{
+      //   const key = document.getElementsByClassName('.key');
+        
+      //   // propertyName 通过条件判断过滤特定属性的事件
+      //   if (event.propertyName !== 'transform') {
+      //     // console.log("只过滤transform");
+      //   return}; 
+        
+      //   // console.log(event.target);
+      //   event.target.classList.remove('playing');
+      // })
+
+      // 使用transitionend有bug，长按键盘会导致playing类别无法消除
+      window.addEventListener('keyup',(event)=>{
+        const key = document.querySelector(`.keys [data-key="${event.keyCode}"]`);
+        
+        // console.log(this.target);
+        // console.log(event.target);
+
+        key.classList.remove('playing');
+;      })
+  </script>
+
+</body>
+</html>
