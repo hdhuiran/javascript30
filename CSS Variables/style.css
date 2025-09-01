@@ -1,0 +1,41 @@
+/* css变量通常定义在 :root 选择器上，这样它们就可以在整个文档中被访问到。:root 就好比是 html 标签，但它的优先级更高。 */
+:root {
+  --base: #ffc600;
+  --spacing: 10px;
+  --blur: 10px;
+}
+/* 图片的 padding 值由 --spacing 变量来决定,同理，背景色和滤镜的模糊度也和对应的变量绑定了 */
+img {
+  /* var() 是一个纯粹的 CSS 函数，它的作用是读取并使用一个 CSS 变量的值。 */
+  padding: var(--spacing);
+  background: var(--base);
+  /* filter: 这是一个 CSS 属性，它的作用是给元素添加图形特效，就像 Photoshop 里的滤镜一样。
+   filter 属性可以接受很多不同的滤镜函数，比如 grayscale() (灰度)、brightness() (亮度)、contrast() (对比度) 等等。
+   blur(): 这是 filter 属性可以使用的众多滤镜函数之一。它的作用就是给元素添加“高斯模糊”效果。
+   括号里的值决定了模糊的程度，值越大，图片就越模糊。例如，blur(5px) 会产生 5 像素的模糊效果。 */
+  filter: blur(var(--blur));
+  width: 200px;
+  height: 200px;
+}
+
+/* 标题中高亮的 JS 字样的颜色，也由 --base 变量控制。所以当你改变颜色选择器时，边框和这个文字会同时变色。 */
+.hl {
+  color: var(--base);
+}
+
+body {
+  text-align: center;
+  background: #193549;
+  color: white;
+  font-family: "helvetica neue", sans-serif;
+  font-weight: 100;
+  font-size: 50px;
+}
+
+.controls {
+  margin-bottom: 50px;
+}
+
+input {
+  width: 100px;
+}
