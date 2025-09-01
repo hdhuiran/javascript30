@@ -11,7 +11,7 @@ function handleUpdate() {
   const suffix = this.dataset.sizing || "";
 
   //   给这个元素增加一个css变量 比如--spacing  --blur --base
-  //   document.documentElement 代表整个 HTML 文档的根元素 <html>。
+  //   document.documentElement 代表整个 HTML 文档的根元素 <html>,document.documentElement 就是获取当前页面的根元素
   //   style.setProperty('--spacing', '10px') 这行代码的作用是给根元素设置一个 CSS 变量 --spacing，并将其值设为 '10px'。
   //   这样一来，整个文档中的任何地方都可以通过 var(--spacing) 来引用这个变量的值，从而实现样式的统一和动态调整。
   document.documentElement.style.setProperty(
