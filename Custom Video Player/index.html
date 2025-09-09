@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML Video Player</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div class="player">
+        <video class="player_video viewer" src="https://player.vimeo.com/external/194837908.sd.mp4?s=c350076905b78c67f74d7ee39fdb4fef01d12420&profile_id=164"></video>
+       <div class="player_controls">
+        <!-- 进度条 -->
+         <div class="progress">
+            <!-- 已播放进度 -->
+            <div class="progress_filled"></div>
+         </div>
+        
+        <!-- 播放键 -->
+        <button class="player_button toggle" title="Toggle Play">►</button>
+
+        <!-- 音量 -->
+        <!-- min, max, step, value: 这些都是 <input type="range"> 的标准属性，分别定义了滑块的最小值、最大值、每次拖动的步长和初始值。 -->
+        <input type="range" name="volume" class="player_slider" min="0" max="1" step="0.05" value="1">
+        <input type="range" name="playbackRate" class="player_slider" min="0.5" max="2" step="0.1" value="1">
+        
+        <!-- 快进倒退 -->
+        <button data-skip="-10" class="player_button">« 10s</button>
+        <button data-skip="25" class="player_button">25s »</button>
+       </div>
+    </div>
+    <script src="./script.js"></script>
+</body>
+</html>

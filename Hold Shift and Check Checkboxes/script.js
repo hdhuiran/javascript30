@@ -46,14 +46,14 @@ function extenCheck(e) {
       index !== nowSelIndex && index > nowSelIndex && element.checked === true
     );
   });
-  console.log("nearMaxCheckboxIndex :" + nearMaxCheckboxIndex);
+  // console.log("nearMaxCheckboxIndex :" + nearMaxCheckboxIndex);
 
   const nearMinCheckboxIndex = checkboxex_2.findIndex((element, index) => {
     return (
       index !== nowSelIndex && index < nowSelIndex && element.checked === true
     );
   });
-  console.log("nearMinCheckboxIndex:" + nearMinCheckboxIndex);
+  // console.log("nearMinCheckboxIndex:" + nearMinCheckboxIndex);
 
   if (nearMaxCheckboxIndex !== -1) {
     setCheckbox(nowSelIndex, nearMaxCheckboxIndex);
@@ -63,8 +63,8 @@ function extenCheck(e) {
   }
 }
 
-function setCheckbox(initIndex, arrayLength) {
-  for (let index = initIndex; index < arrayLength; index++) {
+function setCheckbox(initIndex, endIndex) {
+  for (let index = initIndex; index < endIndex; index++) {
     checkboxex_2[index].checked = true;
   }
 }

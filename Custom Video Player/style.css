@@ -1,0 +1,125 @@
+html{
+    box-sizing: border-box;
+}
+  
+*, *:before, *:after{
+    box-sizing: inherit;
+}
+
+body{
+    margin: 0;
+    padding: 0;
+    display:flex;
+    background:#0c0411;
+    min-height:100vh;
+    /* 渐变 */
+    /* 135deg：渐变角度，从左上角到右下角（135度）*/
+    /* #7c1599 0%：起始颜色，从 0% 位置开始 */
+    /* #921099 48%：中间颜色，在 48% 位置 */
+    /* #7e4ae8 100%：结束颜色，到 100% 位置结束 */
+    background: linear-gradient(135deg, #7c1599 0%,#921099 48%,#7e4ae8 100%);
+    background-size:cover;
+    align-items: center;
+    justify-content: center;
+}
+
+.player {
+    max-width: 750px;
+    border: 5px solid rgba(0,0,0,0.2);
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    position: relative;
+    font-size: 0;
+    overflow: hidden;
+}
+/* 当播放器进入全屏模式时，移除宽度限制，填满整个屏幕 */
+.player:fullscreen {
+    max-width: none;
+    width: 100%;
+}
+
+.player_video {
+    width: 100%;
+}
+
+.player_button {
+    background: none;
+    border: 0;
+    line-height: 1;
+    color: white;
+    text-align: center;
+
+    /* 用于移除元素获得焦点时显示的轮廓线。浏览器通常会在可聚焦元素（如按钮、输入框）获得焦点时显示一个轮廓，这行代码移除了这个默认样式。 */
+    outline: 0;
+    padding: 0;
+    cursor: pointer;
+    max-width: 50px;
+}
+  
+.player_button:focus {
+    border-color: #ffc600;
+}
+
+.player_slider {
+    width: 10px;
+    height: 30px;
+}
+
+.player_controls {
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    transform: translateY(100%) translateY(-5px);
+    transition: all .3s;
+
+    /* 项目在多行上排列，从上到下 */
+    /* 确保当空间不足时，控制元素可以换行显示，而不是被压缩或溢出。 */
+    flex-wrap: wrap;
+    
+    background: rgba(0,0,0,0.1);
+}
+
+.player:hover .player_controls {
+    transform: translateY(0);
+}
+  
+.player:hover .progress {
+    height:15px;
+}
+
+/* 选择所有直接是 .player__controls 子元素的元素 */
+.player_controls > * {
+    flex:1;
+}
+  
+.progress {
+    flex:10;
+    position: relative;
+    display:flex;
+    flex-basis:100%;
+    height:5px;
+    transition:height 0.3s;
+    background:rgba(0,0,0,0.5);
+    cursor:pointer;
+}
+  
+.progress_filled {
+    width:50%;
+    background:#ffc600;
+    flex:0;
+    flex-basis:50%;
+}
+  
+  
+
+input[type=range] {
+    -webkit-appearance: none;
+    background:transparent;
+    width: 100%;
+    margin: 0 5px;
+}
+  
+input[type=range]:focus {
+    outline: none;
+}
+
