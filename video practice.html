@@ -1,41 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
+    <style>
+      .progress_bar {
+        display: flex;
+        width: 640px;
+        height: 5px;
+        flex-basis: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        cursor: pointer;
+      }
+      .progress_filled {
+        width: 50%;
+        background: #ffc600;
+        flex: 0;
+        flex-basis: 0%;
+      }
+      .player_button {
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
     <div class="player">
-        <video class="viewer" src="https://player.vimeo.com/external/194837908.sd.mp4?s=c350076905b78c67f74d7ee39fdb4fef01d12420&profile_id=164"></video>
-        <div class="player_controls">
-            <button class="player_button toggel" >►</button>
+      <video
+        class="viewer"
+        src="https://player.vimeo.com/external/194837908.sd.mp4?s=c350076905b78c67f74d7ee39fdb4fef01d12420&profile_id=164"
+      ></video>
+      <div class="player_controls">
+        <div class="progress_bar">
+          <div class="progress_filled"></div>
         </div>
+        <button class="player_button toggel">►</button>
+        <input type="range" name="volume" class="player_volume_slider" min="0" max="1" step="0.05" value="1">
+      </div>
     </div>
     <script>
-        const player = document.querySelector('.player');
-        const video = player.querySelector('.viewer');
-        const player_button = player.querySelector('.player_button')
+      const player = document.querySelector(".player");
+      const video = player.querySelector(".viewer");
+      const player_button = player.querySelector(".player_button");
+      const progress_bar = player.querySelector(".progress_bar");
+      const progress_filled = player.querySelector(".progress_filled");
+      const player_volume_slider = player.querySelector('.player_volume_slider');
 
-        function play_pause(){
-            const method = video.paused ? 'play' : 'pause';
-            // const method = this.paused ? 'play' : 'pause';
-            console.log("video的状态method:" + method);
-            video[method]();
-        }
+      function play_pause() {
+        const method = video.paused ? "play" : "pause";
+        // const method = this.paused ? 'play' : 'pause';
+        console.log("video的状态method:" + method);
+        video[method]();
+      }
 
-        function update_button(){
-            // const icon = this.paused?'►' : '❚❚';
-            const icon = video.paused?'►' : '❚❚';
-            player_button.textContent = icon;
-        }
+      function handle_progress(){
+        const progress_percent = (video.currentTime / video.duration) * 100 ;
+        // console.log(progress_percent);
+        // console.log(video.currentTime ,video.duration);
+        progress_filled.style.flexBasis = `${progress_percent}% `;
+      }
 
-        video.addEventListener('click',play_pause);
-        video.addEventListener('play',update_button);
-        video.addEventListener('pause',update_button);
-        
-        player_button.addEventListener('click',play_pause);
-        // player_button.addEventListener('click',update_button);
+      function scrub_progress(e){
+        const scrub_time = (e.offsetX / progress_bar.offsetWidth) * video.duration;
+        // console.log(e.offsetX , progress_bar.offsetWidth);
+        video.currentTime = scrub_time;
+      }
+
+      function update_button() {
+        // const icon = this.paused?'►' : '❚❚';
+        const icon = video.paused ? "►" : "❚❚";
+        player_button.textContent = icon;
+      }
+
+      function update_volume(){
+        video.volume = this.value;
+        console.log(this.value);
+      }
+
+      video.addEventListener("click", play_pause);
+      video.addEventListener("play", update_button);
+      video.addEventListener("pause", update_button);
+      video.addEventListener("timeupdate",handle_progress);
+
+      player_button.addEventListener("click", play_pause);
+
+      progress_bar.addEventListener('click', scrub_progress);
+
+      player_volume_slider.addEventListener("change",update_volume);
+      player_volume_slider.addEventListener("mousemove",update_volume);
+      // player_button.addEventListener('click',update_button);
     </script>
-</body>
+  </body>
 </html>
