@@ -3,15 +3,71 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>HTML Video Player practice version</title>
     <style>
+      html {
+        box-sizing: border-box;
+      }
+
+      *,
+      *:before,
+      *:after {
+        box-sizing: inherit;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        background: #0c0411;
+        min-height: 100vh;
+        background-color: white;
+        background-size: cover;
+        align-items: center;
+        justify-content: center;
+      }
+      .player {
+        max-width: 750px;
+        border: 5px solid rgba(0, 0, 0, 0.2);
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        position: relative;
+        overflow: hidden;
+        font-size: 0;
+      }
+
+      .player_video {
+        width: 100%;
+      }
+      .player_controls {
+        display: flex;
+        position: absolute;
+        transform: translateY(100%) translateY(-5px);
+        transition: all 0.3s;
+        flex-wrap: wrap;
+        bottom: 0;
+      }
+
+      .player:hover .player_controls {
+        transform: translateY(0);
+      }
+
+      .player:hover .progress_bar {
+        height: 15px;
+      }
+
+      /* 选择所有直接是 .player__controls 子元素的元素 */
+      .player_controls > * {
+        flex: 1;
+      }
       .progress_bar {
+        flex: 10;
         display: flex;
         width: 640px;
         height: 5px;
         flex-basis: 100%;
         background: rgba(0, 0, 0, 0.5);
         cursor: pointer;
+        transition: height 0.3s;
       }
       .progress_filled {
         width: 50%;
@@ -35,7 +91,17 @@
           <div class="progress_filled"></div>
         </div>
         <button class="player_button toggel">►</button>
-        <input type="range" name="volume" class="player_volume_slider" min="0" max="1" step="0.05" value="1">
+        <input
+          type="range"
+          name="volume"
+          class="player_volume_slider"
+          min="0"
+          max="1"
+          step="0.05"
+          value="1"
+        />
+        <button class="skip_button" data-skip="-10">倒退10s</button>
+        <button class="skip_button" data-skip="+10">快进10s</button>
       </div>
     </div>
     <script>
@@ -44,24 +110,28 @@
       const player_button = player.querySelector(".player_button");
       const progress_bar = player.querySelector(".progress_bar");
       const progress_filled = player.querySelector(".progress_filled");
-      const player_volume_slider = player.querySelector('.player_volume_slider');
+      const player_volume_slider = player.querySelector(
+        ".player_volume_slider"
+      );
+      const skip_button = player.querySelectorAll("[data-skip]");
 
       function play_pause() {
         const method = video.paused ? "play" : "pause";
         // const method = this.paused ? 'play' : 'pause';
-        console.log("video的状态method:" + method);
+        // console.log("video的状态method:" + method);
         video[method]();
       }
 
-      function handle_progress(){
-        const progress_percent = (video.currentTime / video.duration) * 100 ;
+      function handle_progress() {
+        const progress_percent = (video.currentTime / video.duration) * 100;
         // console.log(progress_percent);
         // console.log(video.currentTime ,video.duration);
         progress_filled.style.flexBasis = `${progress_percent}% `;
       }
 
-      function scrub_progress(e){
-        const scrub_time = (e.offsetX / progress_bar.offsetWidth) * video.duration;
+      function scrub_progress(e) {
+        const scrub_time =
+          (e.offsetX / progress_bar.offsetWidth) * video.duration;
         // console.log(e.offsetX , progress_bar.offsetWidth);
         video.currentTime = scrub_time;
       }
@@ -72,22 +142,38 @@
         player_button.textContent = icon;
       }
 
-      function update_volume(){
+      function update_volume() {
         video.volume = this.value;
-        console.log(this.value);
+        // console.log(this.value);
+      }
+
+      function skip() {
+        // video.currentTime += this.dataset.skip;
+        // console.log(this.dataset.skip);
+        video.currentTime += parseFloat(this.dataset.skip);
       }
 
       video.addEventListener("click", play_pause);
       video.addEventListener("play", update_button);
       video.addEventListener("pause", update_button);
-      video.addEventListener("timeupdate",handle_progress);
+      video.addEventListener("timeupdate", handle_progress);
 
       player_button.addEventListener("click", play_pause);
 
-      progress_bar.addEventListener('click', scrub_progress);
+      let mousedown = false;
 
-      player_volume_slider.addEventListener("change",update_volume);
-      player_volume_slider.addEventListener("mousemove",update_volume);
+      progress_bar.addEventListener("click", scrub_progress);
+      progress_bar.addEventListener(
+        "mousemove",
+        (e) => mousedown && scrub_progress(e)
+      );
+      progress_bar.addEventListener("mousedown", () => (mousedown = true));
+      progress_bar.addEventListener("mouseup", () => (mousedown = false));
+
+      player_volume_slider.addEventListener("change", update_volume);
+      player_volume_slider.addEventListener("mousemove", update_volume);
+
+      skip_button.forEach((button) => button.addEventListener("click", skip));
       // player_button.addEventListener('click',update_button);
     </script>
   </body>

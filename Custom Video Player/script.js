@@ -20,6 +20,7 @@ function updateButton() {
 
 function skip() {
     // parseFloat(...): 将获取到的字符串属性值转换成浮点数
+    // dataset 属性返回的值总是字符串类型
     // currentTime 是 <video> 元素的一个可读写属性，代表当前播放的时间（单位：秒）。
     // 直接用 += 在当前时间上增加或减少相应的秒数，实现跳转。
     video.currentTime += parseFloat(this.dataset.skip);
@@ -61,7 +62,10 @@ video.addEventListener('pause', updateButton);
 video.addEventListener('timeupdate', handleProgress);
 
 skipButtons.forEach(button => button.addEventListener('click', skip));
+
+// change 事件：当用户更改并确认输入值后触发（如释放鼠标或按回车键）
 ranges.forEach(range => range.addEventListener('change', handleRangeUpdate));
+// mousemove 事件：当用户在元素上移动鼠标时持续触发
 ranges.forEach(range => range.addEventListener('mousemove', handleRangeUpdate));
 
 let mousedown = false;
