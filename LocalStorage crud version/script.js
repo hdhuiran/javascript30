@@ -9,7 +9,10 @@ const items = JSON.parse(localStorage.getItem("items")) || [];
 // ---【增】---
 function addItem(e) {
   e.preventDefault();
-  const text = this.querySelector("[name=item").value;
+  const text = this.querySelector("[name=item]").value;
+  // console.log(text);
+  // console.log(this.querySelector("[name=item]"));
+  
   const item = {
     text,
     done: false,
