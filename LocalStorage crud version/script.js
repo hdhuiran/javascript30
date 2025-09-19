@@ -26,9 +26,10 @@ function addItem(e) {
 
 // ---【改】(切换完成状态)---
 function toggleDone(e) {
-  if (!e.target.matches('input[type]="checkbox"')) return;
+  if (!e.target.matches('input[type="checkbox"]')) return;
   const index = e.target.dataset.index;
   items[index].done = !items[index].done;
+  console.log(123);
   saveAndRender();
 }
 

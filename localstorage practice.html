@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LocalStorage practice</title>
+    <style>
+      html {
+        display: flex;
+        box-sizing: border-box;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <h2>待办事项</h2>
+      <form class="search_form">
+        <input type="text" name="search" placeholder="请搜索" />
+      </form>
+      <ul class="plates">
+        <li>加载中</li>
+        <li>
+          <input type="checkbox" data-index="" id="" checked />
+          <label for="" data-index="" contenteditable="false">123</label>
+          <button class="edit" data-index="">✏️</button>
+          <button class="delete" data-index="">❌</button>
+        </li>
+      </ul>
+      <form class="add_items">
+        <input type="text" name="item" placeholder="请输入" required />
+        <input type="submit" value="增加" />
+      </form>
+    </div>
+    <script>
+      const search_form = document.querySelector(".search_form");
+      const search_input = document.querySelector("[name=search]");
+      const plates = document.querySelector(".plates");
+      const add_items = document.querySelector(".add_items");
+
+      const items = JSON.parse(localStorage.getItem("items")) || [];
+
+      function addItems(e) {
+        e.preventDefault();
+        const text = this.querySelector("[name=item]").value;
+        const item = {
+          text,
+          done: false,
+        };
+
+        items.push(item);
+        console.log(items);
+        save_and_render();
+        this.reset();
+      }
+
+      function toggleDone(index) {
+        // console.log(123);
+        if (items[index] === undefined) return;
+
+        items[index].done = !items[index].done;
+        // console.log(items);
+
+        save_and_render();
+      }
+
+      function editItem(index, newText) {
+        items[index].text = newText;
+        save_and_render();
+      }
+
+      function deleteItem(index) {
+        items.splice(index, 1);
+        save_and_render();
+      }
+
+      function findItem(e) {
+        const keyWord = e.target.value.toLowerCase();
+        const matchedItems = items.filter((item) => {
+          return item.text.toLowerCase().includes(keyWord);
+        });
+        // console.log(matchedItems);
+        populateList(matchedItems, plates);
+        // save_and_render()
+      }
+
+      function populateList(plates = [], platesLise) {
+        platesLise.innerHTML = plates
+          .map((plate, index) => {
+            return `
+            <li>
+                <input type="checkbox" data-index="${index}" id="item${index}" ${
+              plate.done ? "checked" : ""
+            }>
+                <label for="item${index}" data-index="${index}" contenteditable="false">${
+              plate.text
+            }</label>
+                <button class="edit" data-index="${index}">✏️</button>
+                <button class="delete" data-index="${index}">❌</button>
+            </li>`;
+          })
+          .join("");
+      }
+
+      function handleListClick(e) {
+        const target = e.target;
+        const index = target.dataset.index;
+
+        if (target.matches('input[type="checkbox"]')) {
+          // const index = target.dataset.index;
+          toggleDone(index);
+          // console.log(456);
+          return;
+        }
+
+        if (target.matches(".delete")) {
+          // const index = target.dataset.index;
+          deleteItem(index);
+          return;
+        }
+
+        if (target.matches(".edit")) {
+          // const index = target.dataset.index;
+          const label = plates.querySelector(`label[data-index="${index}"]`);
+          // console.log(label);
+          label.contentEditable = true;
+          label.focus();
+          // --- 【新增代码块开始】 ---
+          // 1. 创建一个 Range 对象
+          const range = document.createRange();
+          // 2. 获取当前的 Selection 对象
+          const selection = window.getSelection();
+          // 3. 将 Range 的范围设置为 label 元素的所有子节点
+          range.selectNodeContents(label);
+          // 4. 将 Range 折叠到其末尾位置（false 表示折叠到终点）
+          range.collapse(false);
+          // 5. 清除任何现有的选区
+          selection.removeAllRanges();
+          // 6. 添加我们新创建的、已定位到末尾的 Range
+          selection.addRange(range);
+          // --- 【新增代码块结束】 ---
+
+          label.addEventListener("blur", () => {
+            label.contentEditable = false;
+            editItem(index, label.textContent);
+          });
+
+          label.addEventListener("keydown", (event) => {
+            if (event.key === "Enter") {
+              event.preventDefault();
+              label.blur();
+            }
+          });
+        }
+      }
+
+      function save_and_render() {
+        localStorage.setItem("items", JSON.stringify(items));
+        populateList(items, plates);
+      }
+      add_items.addEventListener("submit", addItems);
+      search_input.addEventListener("keyup", findItem);
+      plates.addEventListener("click", handleListClick);
+
+      populateList(items, plates);
+    </script>
+  </body>
+</html>
